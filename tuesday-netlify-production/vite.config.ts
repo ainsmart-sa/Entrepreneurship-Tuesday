@@ -1,0 +1,4 @@
+import {defineConfig} from 'vite';
+import react from '@vitejs/plugin-react';
+import {VitePWA} from 'vite-plugin-pwa';
+export default defineConfig({plugins:[react(),VitePWA({registerType:'autoUpdate',includeAssets:['logo.webp','icon-192.png','icon-512.png'],manifest:{name:'تيوزدية | ريادة الأعمال',short_name:'تيوزدية',description:'ورش ولقاءات تيوزدية ريادة الأعمال والحجوزات والتذاكر',lang:'ar',dir:'rtl',start_url:'/',scope:'/',display:'standalone',background_color:'#081725',theme_color:'#081725',icons:[{src:'/icon-192.png',sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:'/icon-512.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]},workbox:{navigateFallback:'/index.html',navigateFallbackDenylist:[/^\/api\//,/^\/\.netlify\//],runtimeCaching:[{urlPattern:({url})=>url.pathname.startsWith('/assets/'),handler:'CacheFirst',options:{cacheName:'tuesday-assets',expiration:{maxEntries:60,maxAgeSeconds:60*60*24*30}}}]}})]});
