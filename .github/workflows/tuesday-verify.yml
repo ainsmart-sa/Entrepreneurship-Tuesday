@@ -1,0 +1,29 @@
+name: Verify Tuesday
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  typecheck-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tuesday-netlify-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run static tests
+        run: npm run test:static
+      - name: Typecheck and build using NON-PRODUCTION fixture values
+        env:
+          DEPLOY_REQUIRE_CONFIG: '1'
+          VITE_SUPABASE_URL: https://example.supabase.co
+          SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: sb_publishable_ci_fixture_not_a_real_key
+          SUPABASE_ANON_KEY: sb_publishable_ci_fixture_not_a_real_key
+          TICKET_SIGNING_SECRET: ci_fixture_only_never_use_in_production_73cb118f
+        run: npm run build
