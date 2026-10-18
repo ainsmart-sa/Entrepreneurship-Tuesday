@@ -10,20 +10,18 @@
 - **Functions directory**: `netlify/functions`
 - المشروع الحالي على Netlify: `neon-griffin-df3de1`؛ اربط المستودع بنفس الموقع، لا تنشئ موقعًا جديدًا إذا أردت الاحتفاظ بالعنوان.
 
-## متغيرات الإنتاج المطلوبة في Netlify
-اضبط المفاتيح داخل Netlify (لا ترفعها إلى GitHub):
+## متغيرات الإنتاج المطلوبة في Netlify (الإصدار 1.0.4)
+هذه **ثلاثة متغيرات إلزامية**. أدخل القيم في Netlify لا في GitHub، مع النطاقين **Builds وFunctions**:
 
 | Name | Value |
 |---|---|
-| `VITE_SUPABASE_URL` | رابط مشروع Supabase |
-| `VITE_SUPABASE_ANON_KEY` | المفتاح العام Publishable |
-| `SUPABASE_URL` | نفس رابط المشروع |
-| `SUPABASE_ANON_KEY` | نفس المفتاح العام |
-| `TICKET_SIGNING_SECRET` | سر عشوائي مولّد حديثًا بطول 32 حرفًا على الأقل |
+| `VITE_SUPABASE_URL` | رابط مشروع Supabase `https://<project-ref>.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | المفتاح العام الذي يبدأ بـ `sb_publishable_` |
+| `TICKET_SIGNING_SECRET` | سر خاص عشوائي من `openssl rand -hex 32`؛ فعّل **Contains secret values** |
 
-**لا تضف مفاتيح `sb_secret_` أو `service_role` داخل متغيرات `VITE_` ولا في المستودع.**
+وظائف Netlify تستخدم القيم العامة من `VITE_` إذا لم توجد أسماء `SUPABASE_URL` و`SUPABASE_ANON_KEY` المكررة. إذا كانت هذه الأسماء المكررة موجودة، فيجب أن تطابق قيم `VITE_` تمامًا. لا تضع مفاتيح `sb_secret_` أو `service_role` في `VITE_` أو GitHub.
 
-إذا أوقف `scripts/verify-env.mjs` البناء بسبب متغير ناقص، أكمل إعداده في Netlify ثم أعد البناء من المصدر. لا تستخدم نسخة `dist` قديمة.
+أضف السر داخل إعدادات الموقع ثم **أعد بناء المصدر**؛ رفع `dist` قديم لا يطبق التغييرات.
 
 ## بيانات قاعدة البيانات
 ملف `supabase/migrations/001_initial.sql` مخصص للتنفيذ الأول فقط، ولا تعِد تشغيله على قاعدة بيانات قائمة. تأكد من الجداول وصلاحيات RLS وحساب المالك وصحة البريد OTP قبل استقبال أي حجز حقيقي.
