@@ -3,8 +3,8 @@ import {createHmac, timingSafeEqual} from 'node:crypto';
 import type {HandlerEvent} from '@netlify/functions';
 
 const getEnv=()=>{
- const url=process.env.SUPABASE_URL;
- const key=process.env.SUPABASE_ANON_KEY;
+ const url=process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+ const key=process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
  const secret=process.env.TICKET_SIGNING_SECRET;
  if(!url || !key || !secret || secret.length<32) throw new Error('SERVER_NOT_CONFIGURED');
  return {url,key,secret};
